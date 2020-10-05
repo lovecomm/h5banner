@@ -1,0 +1,62 @@
+doctype html
+html(lang="en")
+	head
+		title= pageTitle
+		meta(name='ad.size' content='width=' + width + ',height=' + height)
+		meta(charset='UTF-8')
+		<!-- ANIONE: vendorScriptHeader -->
+		style(data-anione="styles" type="text/css").
+			body {
+				background-color: #cdcdcd;
+				margin: 0;
+			}
+
+			a {
+				cursor: pointer;
+				width: #{width}px;
+				height: #{height}px;
+				background: white;
+				display: block;
+				position: relative;
+				overflow: hidden;
+				background-repeat: no-repeat;
+				z-index: 1000;
+				border: 1px solid black;
+				box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				-webkit-box-sizing: border-box;
+			}
+
+			a * {
+				cursor: pointer;
+				position: absolute;
+				z-index: 1;
+				border: none;
+			}
+
+			/* CSS HELPER CLASSES */
+			.halign { left: 0; right: 0; margin: auto; } /* Align a DOM element horizontally */
+			.valign {	top: 0;	bottom: 0; margin: auto; } /* Align a DOM element vertically*/
+			/* /CSS HELPER CLASSES */
+
+		<!-- DoubleClick Greensock CDN (TweenMax) -->
+		script(type="text/javascript" src="https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.5.1_min.js")
+	body
+		|
+		|
+		a(data-anione="markup" href='#ANIONE:vendorLink' id='bannerLink')
+			|
+			each image in images
+				| <img src="#{imgPath}/#{image.filename}" id="#{image.layer_name}" alt="#{image.layer_name}" />
+				|
+		|
+		|
+		script(data-anione="scripts")
+			| (function() { // ANIONE: main timeline function
+			| var tl = new TimelineMax();
+			| var h = #{height};
+			| var w = #{width};
+			|
+			| tl // ANIONE: main timeline
+			| })();
+		<!-- ANIONE: vendorScriptFooter -->
