@@ -31,7 +31,7 @@ exports.handoff = async function () {
 			let static_files = await $.read_dir("./assets/statics");
 			if (static_files) {
 				await fs.mkdirAsync(`${handoff_path}/statics`);
-				await imagemin([`./assets/statics/*.{jpg,png,gif}`],
+				await imagemin([`./assets/statics/*.{jpg,png,gif,svg}`],
 					{
 						destination: `${handoff_path}/statics`,
 						plugins: [
