@@ -92,7 +92,7 @@ const utils = {
 				}
 			}
 			if (copy) {
-				await imagemin([`./assets/images/${size}/*.{jpg,png,gif}`],
+				await imagemin([`./assets/images/${size}/*.{jpg,png,gif,svg}`],
 					{
 						destination: destination,
 						plugins: [
