@@ -237,6 +237,7 @@ html(lang="en")#anione-dev-html
 					var scripts_regex = /<script data-anione="scripts".*?>([\s\S]*?)<\/script>/ig;
 					var scripts = scripts_regex.exec(response)[1];
 					scripts = scripts.replace("(function() { // ANIONE: main timeline function", "return (function() { // ANIONE: main timeline function");
+					scripts = scripts.replace("(function () { // ANIONE: main timeline function", "return (function() { // ANIONE: main timeline function");
 					scripts = scripts.replace("tl // ANIONE: main timeline", "return tl // ANIONE: main timeline")
 					var src_scripts_regex = /<script src="([\s\S]*?)"><\/script>/ig;
 					var src_scripts = [];
