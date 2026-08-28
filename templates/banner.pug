@@ -4,8 +4,8 @@ html(lang="en")
 		title= pageTitle
 		meta(name='ad.size' content='width=' + width + ',height=' + height)
 		meta(charset='UTF-8')
-		<!-- ANIONE: vendorScriptHeader -->
-		style(data-anione="styles" type="text/css").
+		<!-- H5BANNER: vendorScriptHeader -->
+		style(data-H5BANNER="styles" type="text/css").
 			body {
 				background-color: #cdcdcd;
 				margin: 0;
@@ -44,19 +44,19 @@ html(lang="en")
 	body
 		|
 		|
-		a(data-anione="markup" href='#ANIONE:vendorLink' id='bannerLink')
-			|
+		a(data-H5BANNER="markup" href='#H5BANNER:vendorLink' id='bannerLink')
+			!= '\n'
 			each image in images
-				| <img src="#{imgPath}/#{image.filename}" id="#{image.layer_name}" alt="#{image.layer_name}" />
-				|
+				img(src=imgPath + '/' + image.filename id=image.layer_name alt="" width=image.width height=image.height)
+				!= '\n'
 		|
 		|
-		script(data-anione="scripts")
-			| (function() { // ANIONE: main timeline function
+		script(data-H5BANNER="scripts")
+			| (function() { // H5BANNER: main timeline function
 			| var tl = new TimelineMax();
 			| var h = #{height};
 			| var w = #{width};
 			|
-			| tl // ANIONE: main timeline
+			| tl // H5BANNER: main timeline
 			| })();
-		<!-- ANIONE: vendorScriptFooter -->
+		<!-- H5BANNER: vendorScriptFooter -->

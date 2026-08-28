@@ -13,14 +13,19 @@ const 	Promise = require("bluebird"),
 exports.handoff = async function () {
 	const config = JSON.parse(await $.read_path("./h5banner-conf.json")),
 				first_banner_file = await $.read_path(`./banners/${config.sizes[0]}.html`),
-				preview_path = fs.existsSync("./preview/");
+				preview_dir = `./${config.project}-preview`,
+				preview_path = fs.existsSync(preview_dir);
 
 	if (!config || !first_banner_file) return $.handle_error("No project found, please run 'h5banner init' and 'h5banner one' to start your project.");
-	if (!preview_path) return $.handle_error("No preview directory found, please run 'h5banner preview' to generate a project preview first.");
+	if (!preview_path) {
+		$.handle_notice("No preview directory found. Running preview before handoff.");
+		await require("./h5banner-preview").preview();
+		if (!fs.existsSync(preview_dir)) return $.handle_error("Failed to generate preview. Handoff aborted.");
+	}
 
 	try {
 		const banner_files = await $.get_files_in("./banners/"),
-					handoff_path = "./preview/" + config.project + "-handoff",
+					handoff_path = `${preview_dir}/${config.project}-handoff`,
 					handoff_path_exists = $.read_path(handoff_path);
 
 		if (handoff_path_exists) await rimraf(handoff_path);
@@ -98,4 +103,6 @@ exports.handoff = async function () {
 	}
 };
 
-exports.handoff();
+if (require.main === module) {
+	exports.handoff();
+}

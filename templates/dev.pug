@@ -1,5 +1,5 @@
 doctype html
-html(lang="en")#anione-dev-html
+html(lang="en")#H5BANNER-dev-html
 	head
 		title= "H5banner Development"
 		meta(charset='UTF-8')
@@ -8,19 +8,19 @@ html(lang="en")#anione-dev-html
 		script.
 			!{scrubber}
 		style(type="text/css").
-			html#anione-dev-html,
-			body#anione-dev-body {
+			html#H5BANNER-dev-html,
+			body#H5BANNER-dev-body {
 				height: 100%;
 				width: 100%;
 			}
 
-			body#anione-dev-body {
+			body#H5BANNER-dev-body {
 				background-color: #020202;
 				display: flex;
 				margin: 0;
 			}
 
-			body#anione-dev-body > #nav {
+			body#H5BANNER-dev-body > #nav {
 				width: 250px;
 				background: #353535;
 				box-shadow:  0 20px #333;
@@ -28,7 +28,7 @@ html(lang="en")#anione-dev-html
 				flex-direction: column;
 			}
 
-			body#anione-dev-body > #nav > div > button {
+			body#H5BANNER-dev-body > #nav > div > button {
 				width: 100%;
 				border-radius: 0;
 				border: none;
@@ -42,12 +42,12 @@ html(lang="en")#anione-dev-html
 				cursor: pointer;
 			}
 
-			body#anione-dev-body > #nav > div > button:first-of-type { border-top: 1px solid rgba(255, 255, 255, 0.5);}
+			body#H5BANNER-dev-body > #nav > div > button:first-of-type { border-top: 1px solid rgba(255, 255, 255, 0.5);}
 
-			body#anione-dev-body > #nav > div > button.active { background: #00529c; }
-			body#anione-dev-body > #nav > div > button:hover { background: #00305a; }
+			body#H5BANNER-dev-body > #nav > div > button.active { background: #00529c; }
+			body#H5BANNER-dev-body > #nav > div > button:hover { background: #00305a; }
 
-			body#anione-dev-body > #nav > div#title {
+			body#H5BANNER-dev-body > #nav > div#title {
 				text-align: center;
 				color: white;
 				font-size: 22px;
@@ -57,7 +57,7 @@ html(lang="en")#anione-dev-html
 				background: #001A31;
 			}
 
-			body#anione-dev-body > #view {
+			body#H5BANNER-dev-body > #view {
 				width: calc(100% - 250px);
 				display: flex;
 				justify-content: center;
@@ -65,14 +65,14 @@ html(lang="en")#anione-dev-html
 				align-items: center;
 			}
 
-			body#anione-dev-body > #view > #banner-wrapper {
+			body#H5BANNER-dev-body > #view > #banner-wrapper {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
 				border: 1px solid #666;
 			}
 
-			body#anione-dev-body > #view > #banner-wrapper .warning {
+			body#H5BANNER-dev-body > #view > #banner-wrapper .warning {
 				max-width: 270px;
 				color: black;
 				background-color: rgba(255, 255, 255, 0.5);
@@ -81,13 +81,13 @@ html(lang="en")#anione-dev-html
 				font-family: sans-serif;
 			}
 
-			body#anione-dev-body > #view > #scrubber {
+			body#H5BANNER-dev-body > #view > #scrubber {
 				width: 650px;
 				text-align: center;
 				margin: 100px 0 0;
 				position: relative;
 			}
-			body#anione-dev-body > #view > #filesize {
+			body#H5BANNER-dev-body > #view > #filesize {
 				width: 80px;
 				font-family: sans-serif;
 				text-align: center;
@@ -99,7 +99,7 @@ html(lang="en")#anione-dev-html
 				background-color: #353535;
 			}
 
-	body#anione-dev-body
+	body#H5BANNER-dev-body
 		div#nav
 			each banner in banners
 				| <div><button data-link="banners/#{banner}">#{banner.split("/")[0].split(".")[0]}</button></div>
@@ -113,13 +113,28 @@ html(lang="en")#anione-dev-html
 				var destination = $("#banner-wrapper");
 				var scrubber = $("#scrubber");
 				var filesize = $("#filesize");
-				var cookie_is_set = document.cookie.match(/^(.*;)?\s*anione_current_size\s*=\s*[^;]+(.*)?$/);
+				var cookie_is_set = document.cookie.match(/^(.*;)?\s*H5BANNER_current_size\s*=\s*[^;]+(.*)?$/);
 
-				var gsaptools = GSDevTools.create({
-					globalSync:false,
-					container: "#scrubber",
-					minimal: false
-				});
+				var gsaptools = null;
+
+				function createScrubber(animation) {
+					if (gsaptools) {
+						gsaptools.kill();
+						gsaptools = null;
+						$(scrubber).empty();
+					}
+					gsaptools = GSDevTools.create({
+						animation: animation || undefined,
+						paused: false,
+						globalSync: false,
+						container: "#scrubber",
+						minimal: false,
+						persist: false,
+						id: "banner-scrubber",
+					});
+				}
+
+				createScrubber();
 
 				window.getCookie = function(name) {
 					match = document.cookie.match(new RegExp(name + '=([^;]+)'));
@@ -127,17 +142,17 @@ html(lang="en")#anione-dev-html
 				}
 
 				if (!cookie_is_set) {
-					document.cookie = "anione_current_size=" + getBannerSize(banners[0]);
+					document.cookie = "H5BANNER_current_size=" + getBannerSize(banners[0]);
 					handleAjax($(banners[0]).attr("data-link"));
 				} else {
-					handleAjax("banners/" + getCookie("anione_current_size") + ".html");
+					handleAjax("banners/" + getCookie("H5BANNER_current_size") + ".html");
 				}
 
 				$(banners).on("click", function() {
 					$(banners).removeClass('active');
 					$(this).addClass('active');
 					var link = $(this).attr("data-link");
-					document.cookie = "anione_current_size=" + getBannerSize(this);
+					document.cookie = "H5BANNER_current_size=" + getBannerSize(this);
 					handleAjax.call(this, link);
 				});
 
@@ -231,17 +246,30 @@ html(lang="en")#anione-dev-html
 				}
 
 				function dataFilter (response) {
-					var styles = response.match(/<style data-anione="styles".*?>[\s\S]*?<\/style>/ig)[0];
+					var styles = response.match(/<style data-(?:H5BANNER|anione)="styles".*?>[\s\S]*?<\/style>/ig)[0];
 					var href_styles_match = response.match(/<link.*href="([\s\S]*?)".*?>/ig);
 					var href_styles = "";
-					var scripts_regex = /<script data-anione="scripts".*?>([\s\S]*?)<\/script>/ig;
+					var scripts_regex = /<script data-(?:H5BANNER|anione)="scripts".*?>([\s\S]*?)<\/script>/ig;
 					var scripts = scripts_regex.exec(response)[1];
-					scripts = scripts.replace("(function() { // ANIONE: main timeline function", "return (function() { // ANIONE: main timeline function");
-					scripts = scripts.replace("(function () { // ANIONE: main timeline function", "return (function() { // ANIONE: main timeline function");
-					scripts = scripts.replace("tl // ANIONE: main timeline", "return tl // ANIONE: main timeline")
+					// Wrap the banner IIFE so new Function(...)() returns the timeline for GSDevTools.
+					// Supports same-line and next-line comments (prettier often moves them).
+					// Matches both H5BANNER and legacy ANIONE tokens.
+					scripts = scripts.replace(
+						/\(function\s*\(\s*\)\s*\{\s*(\/\/\s*(?:H5BANNER|ANIONE):\s*main timeline function)?/,
+						"return (function() { // H5BANNER: main timeline function"
+					);
+					// Classic banners chain everything off `tl // H5BANNER...` (or ANIONE) and need an early return.
+					// Modular banners already `return tl` at the end — skip the early return so module
+					// setup code still runs in the preview tool.
+					if (!/\breturn\s+tl\b/.test(scripts)) {
+						scripts = scripts.replace(
+							/(\btl)\b(?=[^;]*\/\/\s*(?:H5BANNER|ANIONE):\s*main timeline)/,
+							"return $1"
+						);
+					}
 					var src_scripts_regex = /<script src="([\s\S]*?)"><\/script>/ig;
 					var src_scripts = [];
-					var markup = response.match(/<a data-anione="markup".*?>[\s\S]*?<\/a>/ig)[0];
+					var markup = response.match(/<a data-(?:H5BANNER|anione)="markup".*?>[\s\S]*?<\/a>/ig)[0];
 					markup = markup.replace(/\.\.\/assets\//ig, "assets/");
 
 					var a_src;
@@ -269,8 +297,11 @@ html(lang="en")#anione-dev-html
 
 				function handleScrubber () {
 					if (window.banner) {
-						gsaptools.animation(window.banner);
-						gsaptools.update();
+						// Recreate GSDevTools with the banner timeline. Calling .animation() on the
+						// existing instance races with GSDevTools' deferred init and often leaves
+						// the scrubber stuck on Global Timeline at 0.00/0.00.
+						createScrubber(window.banner);
+						window.banner.play(0);
 					}
 				}
 			});

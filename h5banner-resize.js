@@ -39,6 +39,14 @@ exports.resize = async function () {
 					banner.file = $.replace_string_regex(banner.file, "height=" + first_banner.height , "height=" + banner.height);
 					// HTML/img instances of size
 					banner.file = $.replace_string_regex(banner.file, first_banner.size , banner.size);
+					// Full-size <img> width/height attributes (quoted or unquoted)
+					banner.file = banner.file.replace(/<img\b[^>]*>/gi, (imgTag) => {
+						const widthRe = new RegExp(`(\\bwidth\\s*=\\s*)(["']?)${first_banner.width}\\2(?=[\\s>/])`, "gi");
+						const heightRe = new RegExp(`(\\bheight\\s*=\\s*)(["']?)${first_banner.height}\\2(?=[\\s>/])`, "gi");
+						return imgTag
+							.replace(widthRe, `$1$2${banner.width}$2`)
+							.replace(heightRe, `$1$2${banner.height}$2`);
+					});
 					// JS vars of size
 					banner.file = $.replace_string_regex(banner.file, "var w = " + first_banner.width , "var w = " + banner.width);
 					banner.file = $.replace_string_regex(banner.file, "var h = " + first_banner.height , "var h = " + banner.height);
