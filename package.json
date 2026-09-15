@@ -5,7 +5,7 @@
 		"url": "https://github.com/lovecomm"
 	},
 	"bin": {
-		"h5banner": "./index.js"
+		"h5banner": "index.js"
 	},
 	"bugs": {
 		"url": "https://github.com/lovecomm/h5banner/issues"
