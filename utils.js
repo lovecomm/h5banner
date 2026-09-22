@@ -155,7 +155,7 @@ const utils = {
 				return Promise.reject("Failed to process development template.");
 			}
 		},
-		preview: async function (previewDir) {
+		preview: async function (previewDir, cacheBust) {
 			const $ = utils,
 				config = JSON.parse(await $.read_path("./h5banner-conf.json"));
 			if (!config) return Promise.reject("No config found. Preview failed.");
@@ -212,7 +212,7 @@ const utils = {
 
 				const templatePath = `${__dirname}/${$.paths.template.preview}`,
 					options = { pretty: true, filename: "index.html" },
-					locals = { genDate: date_obj, randomNumber: Math.random(), banners: allbannerscombined, pageTitle: config.project },
+					locals = { genDate: date_obj, randomNumber: cacheBust || Date.now(), banners: allbannerscombined, pageTitle: config.project },
 					html = pug.renderFile(templatePath, Object.assign(options, locals));
 				await fs.writeFileAsync(`${previewDir}/index.html`, html);
 				return Promise.resolve();
